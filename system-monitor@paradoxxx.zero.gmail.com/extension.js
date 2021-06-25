@@ -2445,37 +2445,6 @@ function enable() {
 
         tray.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        let pie_item = Main.__sm.pie;
-        pie_item.create_menu_item();
-        tray.menu.addMenuItem(pie_item.menu_item);
-
-        let bar_item = Main.__sm.bar;
-        bar_item.create_menu_item();
-        tray.menu.addMenuItem(bar_item.menu_item);
-
-        change_usage();
-        Schema.connect('changed::disk-usage-style', change_usage);
-
-        tray.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-        tray.menu.connect(
-            'open-state-changed',
-            function (menu, isOpen) {
-                if (isOpen) {
-                    Main.__sm.pie.actor.queue_repaint();
-
-                    menu_timeout = Mainloop.timeout_add_seconds(
-                        5,
-                        () => {
-                            Main.__sm.pie.actor.queue_repaint();
-                            return true;
-                        });
-                } else {
-                    Mainloop.source_remove(menu_timeout);
-                }
-            }
-        );
-
         let _appSys = Shell.AppSystem.get_default();
         let _gsmApp = _appSys.lookup_app('gnome-system-monitor.desktop');
         let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
